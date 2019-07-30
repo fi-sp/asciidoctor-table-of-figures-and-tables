@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="toftot">
+    <output-path>$PROJECT_DIR$/out/artifacts/toftot</output-path>
+    <root id="archive" name="toftot.jar">
+      <element id="dir-copy" path="$PROJECT_DIR$" />
+    </root>
+  </artifact>
+</component>

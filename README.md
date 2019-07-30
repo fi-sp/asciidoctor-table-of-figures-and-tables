@@ -1,10 +1,16 @@
 # Asciidoctorj-Extension zum automatischen Einfügen von Tabellen- und Abbildungsverzeichnissen
 
-Zum Benutzen der Extension die Dependencies in der pom.xml zur Verfügung stellen
+Extension bauen 
 
-    <groupId>de.fisp.asciidoctorj.extensions</groupId>
+    mvn clean install
+  
+Zum Benutzen der Extension die Dependency in der _pom.xml_ zur Verfügung stellen
+
+    <dependency>
+      <groupId>de.fisp.asciidoctorj.extensions</groupId>
       <artifactId>toftot</artifactId>
       <version>1.0-SNAPSHOT</version>    
+    </dependency>
 
 Nun steht die Extension zur Verfügung.
 Die Nutzung der Features **:tof:** bzw. **:tof:** funktioniert analog zu **:toc:**
@@ -19,7 +25,7 @@ Wenn ein Abbildungsverzeichnis eingefügt werden soll, muss im Document-Header d
 gesetzt werden, default ist "Abbildungsverzeichnis". 
 
 
-Die Extension funktioniert wie folgt : 
+Die Extension funktioniert wie folgt: 
 
 Wenn im Header des Dokuments :tof: und/oder :tot: gesetzt sind, werden die jeweiligen Verzeichnisse nach folgendem Schema generiert:
 
@@ -53,4 +59,3 @@ der Pfad zum Bild ("**image::/...**") bzw. die Struktur der Tabelle (" **[cols="
 der Extension erkannt wird und auch von Asciidoctorj nicht automatisch mitgezählt wird. Um die Erkennung der Bilder sicherzustellen,
 bitte in der Pfaddeklaration **image::/** statt **image:/** verwenden, also mit zwei Doppelpunkten(**::**), statt mit einem(:), da Asciidoctorj sonst
 ebenfalls nicht automatisch mitzählt und die Extension das Bild somit nicht einbezieht.
- 

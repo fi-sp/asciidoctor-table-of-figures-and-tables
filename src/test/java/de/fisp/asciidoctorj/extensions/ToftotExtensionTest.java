@@ -10,28 +10,33 @@ public class ToftotExtensionTest {
 
     @Test
     public void registerExtensionClassesToAsciidocExtensionRegistryInstanceTest() {
-        AsciidocInterfaceTest ascInterTest = new AsciidocInterfaceTest();
+        TestAsciidocInterface ascInterTest = new TestAsciidocInterface();
         ToftotExtension toftotExtension = new ToftotExtension();
         toftotExtension.register(ascInterTest);
 
-        Boolean toftotTree = false;
-        Boolean tofBlock = false;
-        Boolean totBlock = false;
-        Boolean valid = false;
+        boolean toftotTree = false;
+        boolean tofBlock = false;
+        boolean totBlock = false;
 
         for (int i = 0; i < ascInterTest.processorList.size(); i++) {
-            if (ascInterTest.processorList.get(i).equals("de.fisp.asciidoctorj.extensions.ToftotTreeProcessor")) {
-                toftotTree = true;
-            } else if (ascInterTest.processorList.get(i).equals("de.fisp.asciidoctorj.extensions.TofBlockMacroProcessor")) {
-                tofBlock = true;
-            } else if (ascInterTest.processorList.get(i).equals("de.fisp.asciidoctorj.extensions.TotBlockMacroProcessor")) {
-                totBlock = true;
+            switch (ascInterTest.processorList.get(i)) {
+                case "de.fisp.asciidoctorj.extensions.ToftotTreeProcessor":
+                    toftotTree = true;
+                    break;
+                case "de.fisp.asciidoctorj.extensions.TofBlockMacroProcessor":
+                    tofBlock = true;
+                    break;
+                case "de.fisp.asciidoctorj.extensions.TotBlockMacroProcessor":
+                    totBlock = true;
+                    break;
+                default:
+                    throw new IllegalStateException(String.format("Unbekannter Prozessor %s registriert", ascInterTest.processorList.get(i)));
             }
         }
-        if (toftotTree == true && tofBlock == true && totBlock == true) {
-            valid = true;
-        }
-        assertThat(valid.toString(), is("true"));
+
+        assertThat(toftotTree, is(true));
+        assertThat(tofBlock, is(true));
+        assertThat(totBlock, is(true));
     }
 
 }

@@ -19,12 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class AsciidocInterfaceTest implements Asciidoctor, JavaExtensionRegistry {
+public class TestAsciidocInterface implements Asciidoctor, JavaExtensionRegistry {
 
-    Integer treeProcessorCounter = 0;
-    Integer blockProcessorCounter = 0;
-    List<String> processorList = new LinkedList<String>();
-
+    List<String> processorList = new LinkedList<>();
 
     @Override
     public String convert(String content, Map<String, Object> options) {
@@ -58,17 +55,17 @@ public class AsciidocInterfaceTest implements Asciidoctor, JavaExtensionRegistry
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
-
+        // mock
     }
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
-
+        // mock
     }
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
-
+        // mock
     }
 
     @Override

@@ -18,16 +18,15 @@ public class TotBlockMacroProcessorTest {
     @Test
     public void givenTotMacroThenSectionShouldBeAppendedTest() {
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenTotMacroThenSectionShouldBeAppendedTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
-        iterateDocumentToFindTotSection((StructuralNode) doc);
+        iterateDocumentToFindTotSection(doc);
     }
 
     private void iterateDocumentToFindTotSection(StructuralNode block) {
         List<StructuralNode> blocks = block.getBlocks();
-        for (int i = 0; i < blocks.size(); i++) {
-            final StructuralNode currentBlock = blocks.get(i);
+        for (final StructuralNode currentBlock : blocks) {
             if ("_totSection".equals(currentBlock.getId())) {
                 Assert.assertThat("Tabellenverzeichnis".equals(currentBlock.getTitle()), is(true));
                 break;

@@ -21,7 +21,7 @@ public class ToftotTreeProcessorTest {
     public void givenFiguresInDocThenMapShouldContainValuesTest() {
         ToftotTreeProcessor treeProcessor = new ToftotTreeProcessor();
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenFiguresInDocThenMapShouldContainValuesTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
         treeProcessor.process(doc);
@@ -34,7 +34,7 @@ public class ToftotTreeProcessorTest {
     public void givenTablesInDocThenMapShouldContainValuesTest() {
         ToftotTreeProcessor treeProcessor = new ToftotTreeProcessor();
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenTablesinDocThenMapShouldContainValuesTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
         treeProcessor.process(doc);
@@ -47,19 +47,19 @@ public class ToftotTreeProcessorTest {
     public void givenBlockAndInlineMacroThenOnlyShouldListBlockMacroTest() {
         ToftotTreeProcessor treeProcessor = new ToftotTreeProcessor();
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenBlockAndInlineMacroThenOnlyShouldListBlockMacroTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
         treeProcessor.process(doc);
         assertThat(treeProcessor.figureMap.size(), is(1));
-        assertThat(treeProcessor.figureMap.get(1).toString().equals("Middle Office Service Partner Startseite1"), is(true));
+        assertThat(treeProcessor.figureMap.get(1).equals("Middle Office Service Partner Startseite1"), is(true));
     }
 
     @Test
     public void givenNoImagesOrTablesThenMapShouldBeEmptyTest() {
         ToftotTreeProcessor treeProcessor = new ToftotTreeProcessor();
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenNoImagesOrTablesThenMapShouldBeEmptyTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
         treeProcessor.process(doc);
@@ -69,12 +69,10 @@ public class ToftotTreeProcessorTest {
 
     @Test
     public void givenTofSectionInDocThenSectionShouldHaveValuesTest() {
-        ToftotTreeProcessor treeProcessor = new ToftotTreeProcessor();
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenTofSectionInDocThenSectionShouldHaveValuesTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
-        String[] titleArray = new String[2];
         String content = "<div class=\"paragraph\">\n" +
                 "<p><a anchor=\"_tof00001\">Abbildung 1: Middle Office Service Partner Startseite1</a><br>\n" +
                 "<a anchor=\"_tof00002\">Abbildung 2: Middle Office Service Partner Startseite2</a><br></p>\n" +
@@ -84,9 +82,8 @@ public class ToftotTreeProcessorTest {
 
     @Test
     public void givenTotSectionInDocThenSectionShouldHaveValuesTest() {
-        ToftotTreeProcessor treeProcessor = new ToftotTreeProcessor();
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenTotSectionInDocThenSectionShouldHaveValuesTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
 
@@ -97,10 +94,9 @@ public class ToftotTreeProcessorTest {
         sectionInhaltTest(doc, "_totSection", content);
     }
 
-    public void sectionInhaltTest(StructuralNode block, String sectId, String inhalt) {
+    private void sectionInhaltTest(StructuralNode block, String sectId, String inhalt) {
         List<StructuralNode> blocks = block.getBlocks();
-        for (int i = 0; i < blocks.size(); i++) {
-            final StructuralNode currentBlock = blocks.get(i);
+        for (final StructuralNode currentBlock : blocks) {
             if (sectId.equals(currentBlock.getId())) {
                 String proof = currentBlock.getContent().toString();
                 assertThat(proof.equals(inhalt), is(true));

@@ -18,16 +18,15 @@ public class TofBlockMacroProcessorTest {
     @Test
     public void givenTofMacroThenSectionShouldBeAppendedTest() {
         Asciidoctor asciidoctor = create();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         File file = new File("src/test/docs/givenTofMacroThenSectionShouldBeAppendedTest.adoc");
         Document doc = asciidoctor.loadFile(file, map);
-        iterateDocumentToFindTofSection((StructuralNode) doc);
+        iterateDocumentToFindTofSection(doc);
     }
 
     private void iterateDocumentToFindTofSection(StructuralNode block) {
         List<StructuralNode> blocks = block.getBlocks();
-        for (int i = 0; i < blocks.size(); i++) {
-            final StructuralNode currentBlock = blocks.get(i);
+        for (final StructuralNode currentBlock : blocks) {
             if ("_tofSection".equals(currentBlock.getId())) {
                 Assert.assertThat("Abbildungsverzeichnis".equals(currentBlock.getTitle()), is(true));
                 break;

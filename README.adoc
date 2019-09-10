@@ -1,0 +1,93 @@
+= Asciidoctorj-Extension zum automatischen Einfügen von Tabellen- und Abbildungsverzeichnissen
+
+== Extension bauen
+
+    mvn clean install
+
+== Extension verwenden
+
+Zum Benutzen der Extension die Dependency in der _pom.xml_ dem  **asciidoctor-maven-plugin** zur Verfügung stellen
+
+        <build>
+           <plugins>
+             <plugin>
+               <groupId>org.asciidoctor</groupId>
+               <artifactId>asciidoctor-maven-plugin</artifactId>
+               <version>${asciidoctor.maven.plugin.version}</version>
+               <extensions>true</extensions>
+               <dependencies>
+                 <dependency>
+                   <groupId>de.fisp.asciidoctorj.extensions</groupId>
+                   <artifactId>toftot</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+                 </dependency>
+                 ....
+                 <dependencies>
+             <plugin>
+           <plugins>
+        <build>
+
+Nun steht die Extension zur Verfügung.
+Die Nutzung der Features **Table of Figures(ToF)** und **Table of Tables(ToT)** funktioniert wie folgt:
+
+Wenn ein Abbildungsverzeichnis eingefügt werden soll, muss im Dokument das Macro **tof::[ ]** gesetzt sein.
+Das Verzeichnis wird an die Stelle im Dokument gesetzt, an der sich das Macro befindet.
+
+Wenn ein Tabellenverzeichnis eingefügt werden soll, muss im Dokument das Macro **tot::[ ]** gesetzt sein. Das Verzeichnis wird an die Stelle im Dokument gesetzt, an der sich das Macro befindet.
+
+Die Extension funktioniert wie folgt:
+
+Wenn im Dokument das Macro **tof::[ ]** bzw. **tot::[]** gesetzt ist, wird der Prozess zum Erstellen des jeweligen Verzeichnisses angestoßen.
+
+Zunächst verarbeiten die BlockMacroProcessoren das Dokument so, dass die im Text platzierten Macros ( **tof::[ ]** oder **tot::[ ]**) durch AST-Nodes ( Sections ) ersetzt werden.
+Diese Sections bekommen einen Namen ( **_tofSection** bzw. **_totSection**), welcher später genutzt wird, um die Stelle zu identifizieren, an die das Verzeichnis angehangen werden soll.
+
+Anschließend durchläuft der Treeprocessor das Dokument und erstellt einen Anker für jedes Bild bzw. jede Tabelle.
+Hierauf folgt das Befüllen der vorher erstellten Sections (**_tofSection** bzw. **_totSection**) mit Links zu den Ankern. Die Links bestehen hierbei aus dem Anker + dem Namen des
+referenzierten Objektes.
+
+Die Extension durchläuft das übergebene Dokument und sucht nach Blöcken, deren Context **image** btw **table** ist. Wenn ein solcher Block gefunden wurde,
+wird der Name des Objekts in die jeweilige Namensliste (Abbildung oder Tabelle) übernommen und es wird ein Anker gesetzt.
+Nachdem das gesamte Dokument durchlaufen wurde, werden die generierten Verzeichnisse mit den jeweils passenden Ankern in denjenigen Teil des Zieldokumentes geschrieben, in dem sich das Macro
+**tof::[ ]** btw **tot::[ ]** befindet .
+
+== Hinweis
+
+Die Extension erkennt nur Tabellen/Bilder, die im Source-Dokument nach Asciidoc-Nomenklatur richtig beschrieben sind. Diese sieht wie folgt aus:
+
+für Bilder:
+
+    .Image-Name
+    image::/my/path/image11.png[image,width=XXX,height=XXX]
+
+für Tabellen:
+
+    .Table-Name
+    [cols=",",options="header",]
+    |===
+    |Werte |Werte
+    |Werte |Werte
+    |Werte|
+    * Werte
+    * Werte
+    |===
+
+Um die Erkennung der Bilder sicherzustellen,
+bitte in der Pfaddeklaration **image::/** statt **image:/** verwenden, also mit zwei Doppelpunkten(**::**), statt mit einem(**:**), da Asciidoctorj sonst
+ebenfalls nicht automatisch mitzählt und die Extension das Bild nicht einbezieht.
+
+Neben den Macros, die vorher nicht als Attribut gesetzt werden müssen, sondern schlicht im Text plaziert werden, gibt es
+die Möglichkeit, Attribute zu setzen, um **tof::[]** bzw. **tot::[]** zu configurieren:
+
+== Hinweis
+
+Asciidoc ermöglicht das Nutzen von Custom Attributes im Dokument-Header in der Form **:Attributename: Attributwert**.
+Die durch die Extensions zur Verfügung gestellten Attribute sind die folgenden:
+
+**:tof-title:** Kann genutzt werden, um dem ToF einen Titel zu geben, default ist empty (" "), erwarteter Wert ist ein String
+
+**:tot-title:** Kann genutzt werden, um dem ToT einen Titel zu geben, default ist empty (" "), erwarteter Wert ist ein String
+
+**:tof-numbered:** Kann genutzt werden, um die ToF-Section zu numerieren & somit z.B. ins Inhaltsverzeichnis aufzunehmen. Erwarteter Wert ist ein String( "true" oder "false")
+
+**:tot-numbered:** Kann genutzt werden, um die ToT-Section zu numerieren & somit z.B. ins Inhaltsverzeichnis aufzunehmen.  Erwarteter Wert ist ein String( "true" oder "false")

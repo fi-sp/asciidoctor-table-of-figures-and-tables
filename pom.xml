@@ -16,6 +16,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <asciidoctor.maven.plugin.version>2.0.0-RC.1</asciidoctor.maven.plugin.version>
+    <asciidoctorj.pdf.version>1.5.0-beta.2</asciidoctorj.pdf.version>
+    <asciidoctorj.version>2.1.0</asciidoctorj.version>
+    <jruby.version>9.2.7.0</jruby.version>
+    <maven.build.timestamp.format>dd.MM.yyyy</maven.build.timestamp.format>
   </properties>
 
   <dependencies>
@@ -39,18 +44,32 @@
     <optional>true</optional>
     </dependency>
 
-
+    <dependency>
+      <groupId>org.asciidoctor</groupId>
+      <artifactId>asciidoctorj-pdf</artifactId>
+      <version>${asciidoctorj.pdf.version}</version>
+    </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter</artifactId>
+          <version>RELEASE</version>
+          <scope>compile</scope>
+      </dependency>
 
   </dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.sonarsource.scanner.maven</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>3.6.0.1398</version>
-      </plugin>
-    </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.rb</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
 
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
@@ -69,6 +88,7 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
         </plugin>
+
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
@@ -77,6 +97,7 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
         </plugin>
+
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
@@ -96,5 +117,105 @@
         </plugin>
       </plugins>
     </pluginManagement>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>8</source>
+                  <target>8</target>
+              </configuration>
+          </plugin>
+      </plugins>
   </build>
+
+
+  <profiles>
+    <profile>
+      <id>toftotExtGeneratePdf</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <version>${asciidoctor.maven.plugin.version}</version>
+            <extensions>true</extensions>
+            <dependencies>
+
+              <dependency>
+                <groupId>de.fisp.asciidoctorj.extensions</groupId>
+                <artifactId>toftot</artifactId>
+                <version>1.0-SNAPSHOT</version>
+              </dependency>
+
+              <dependency>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctorj-pdf</artifactId>
+                <version>${asciidoctorj.pdf.version}</version>
+              </dependency>
+
+              <!-- Comment this section to use the default jruby artifact provided by the plugin -->
+              <dependency>
+                <groupId>org.jruby</groupId>
+                <artifactId>jruby-complete</artifactId>
+                <version>${jruby.version}</version>
+              </dependency>
+              <!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin -->
+              <dependency>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctorj</artifactId>
+                <version>${asciidoctorj.version}</version>
+
+              </dependency>
+            </dependencies>
+            <configuration>
+              <sourceDirectory>${project.basedir}/src/asciidoc</sourceDirectory>
+              <attributes>
+                <lang>de</lang>
+                <revnumber>${project.version}</revnumber>
+                <revdate>${maven.build.timestamp}</revdate>
+              </attributes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>generate-pdf</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>process-asciidoc</goal>
+                </goals>
+                <configuration>
+
+                  <backend>pdf</backend>
+                  <doctype>book</doctype>
+                  <!-- jede Quelldatei sucht die Referenzen relativ zu sich selbst -->
+                  <relativeBaseDir>true</relativeBaseDir>
+                  <!-- auch die Bilder werden relativ gesucht -->
+                  <imagesDir>.</imagesDir>
+                  <attributes>
+                    <!-- Theme und Fonts sind für alle Dokumente gültig -->
+                    <pdf-stylesdir>${project.basedir}/src/asciidoc/_theme</pdf-stylesdir>
+                    <pdf-fontsdir>${project.basedir}/src/asciidoc/_fonts</pdf-fontsdir>
+                    <pdf-style>fisp</pdf-style>
+                    <idprefix/>
+                    <idseparator>-</idseparator>
+                  </attributes>
+               </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.6.0.1398</version>
+          </plugin>
+        </plugins>
+
+      </build>
+    </profile>
+  </profiles>
 </project>

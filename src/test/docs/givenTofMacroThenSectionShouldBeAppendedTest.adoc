@@ -1,0 +1,16 @@
+:tof-title: Abbildungsverzeichnis
+
+= Dokument
+
+== erste Section
+
+lorem ipsum
+
+tot::[]
+
+== zweite Section
+
+.Middle Office Service Partner Startseite1
+image::/Pandoc/media/image5.png[image,width=604,height=313]
+
+lorem ipsum

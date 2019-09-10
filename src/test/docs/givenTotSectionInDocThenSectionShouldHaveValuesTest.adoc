@@ -1,0 +1,27 @@
+= Dokument
+
+== First Sect
+
+
+tot::[]
+
+.Standard Vorgangssuche1
+[cols=",",options="header",]
+|===
+|Bereich / Feld / Schaltfläche |Beschreibung
+|*Sucheigenschaft* |Suchbegriff muss in der Sucheigenschaft vorhanden sein
+|*Suchbegriff* |Der Begriff nach dem gesucht wird
+|*Erweiterte Suche* |Öffnet die erweiterte Suche
+|*Vorgangsinformationen* |Informationen zu einem ausgewählten Vorgang
+|===
+
+.Standard Vorgangssuche2
+[cols=",",options="header",]
+|===
+|Bereich / Feld / Schaltfläche |Beschreibung
+|*Sucheigenschaft* |Suchbegriff muss in der Sucheigenschaft vorhanden sein
+|*Suchbegriff* |Der Begriff nach dem gesucht wird
+|*Erweiterte Suche* |Öffnet die erweiterte Suche
+|*Vorgangsinformationen* |Informationen zu einem ausgewählten Vorgang
+|===
+

@@ -1,6 +1,6 @@
 name: Deploy Package
 
-on: release
+on: [issues]
 
 jobs:
   deploy:
